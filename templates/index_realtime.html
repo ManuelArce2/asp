@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Aspiradora</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        // Conexión con Socket.IO
+        const socket = io();
+
+        // Escuchar el evento "nuevo_mapa" para actualizar el mapa en tiempo real
+        socket.on('nuevo_mapa', (data) => {
+            console.log(data.message); // Mostrar mensaje en consola
+            const mapa = document.getElementById('mapa');
+            if (mapa) {
+                // Actualizar la imagen del mapa con un timestamp para evitar caché
+                mapa.src = '/mapeo?' + new Date().getTime();
+            } else {
+                const container = document.getElementById('mapa-container');
+                container.innerHTML = `<img id="mapa" src="/mapeo?${new Date().getTime()}" alt="Mapa Radar">`;
+            }
+        });
+
+        // Función para detener la aspiradora
+        function detenerAspiradora() {
+            fetch('/detener', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => alert(data.message))
+                .catch(error => console.error('Error al detener la aspiradora:', error));
+        }
+
+        // Función para reiniciar la aspiradora
+        function reiniciarAspiradora() {
+            fetch('/reiniciar', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => alert(data.message))
+                .catch(error => console.error('Error al reiniciar la aspiradora:', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>Control de Aspiradora</h1>
+    <div>
+        <button onclick="detenerAspiradora()">Detener Aspiradora</button>
+        <button onclick="reiniciarAspiradora()">Reiniciar Aspiradora</button>
+    </div>
+    <div id="mapa-container">
+        <h2>Mapa tipo Radar</h2>
+        {% if mapa_disponible %}
+            <img id="mapa" src="/mapeo" alt="Mapa Radar">
+        {% else %}
+            <p>Aún no se ha generado ningún mapa.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
