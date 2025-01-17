@@ -119,20 +119,3 @@
     </div>
 </body>
 </html>
-
-<body>
-    <h1>Control de Aspiradora</h1>
-    <div>
-        <button onclick="detenerAspiradora()">Detener Aspiradora</button>
-        <button onclick="reiniciarAspiradora()">Reiniciar Aspiradora</button>
-    </div>
-    <div id="mapa-container">
-        <h2>Mapa tipo Radar</h2>
-        {% if mapa_disponible %}
-            <img id="mapa" src="/mapeo" alt="Mapa Radar">
-        {% else %}
-            <p>Aún no se ha generado ningún mapa.</p>
-        {% endif %}
-    </div>
-</body>
-</html>
